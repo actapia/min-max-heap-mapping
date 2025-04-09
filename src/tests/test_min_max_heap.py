@@ -1,5 +1,5 @@
 import unittest
-from min_max_heap.MinMaxHeap import *
+from heap_mapping.min_max_heap import *
 
 class TestMinMaxHeap(unittest.TestCase):
     example_data = [12, 24, -1, 1, 14, 3, 55, 91, 0, 13]
