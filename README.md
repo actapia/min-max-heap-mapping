@@ -65,3 +65,10 @@ You can look up and delete arbitrary elements in $O(log(n))$ time.
 del heap2[6]
 print(6 in heap2) # False
 ```
+
+Iteration is performed out of order. Note that this order is also *not* the
+order in which the elements are stored in the heap!
+
+```python
+print(list(heap2)) # [5, 0, 4, 1, 2, 9, 8, 7]
+```
