@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "heap-mapping"
+version = "0.1.0"
+authors = [
+    { name = "Andrew Tapia", email = "andrew.tapia@uky.edu" }
+]
+description =  "An implementation of a Min-Max Heap with a MutableMapping interface."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/actapia/min-max-heap-mapping"
+"Bug Tracker" = "https://github.com/actapia/min-max-heap-mapping"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["heap_mapping"]

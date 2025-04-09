@@ -320,7 +320,3 @@ class MinMaxHeap(MutableMapping):
     
     def pop(self, k):
         return self.delete_value(k).priority
-    
-if __name__ == "__main__":
-    from IPython import embed
-    embed()
