@@ -3,6 +3,7 @@ from min_max_heap.MinMaxHeap import *
 
 class TestMinMaxHeap(unittest.TestCase):
     example_data = [12, 24, -1, 1, 14, 3, 55, 91, 0, 13]
+    data2 = [0, 22, 23, 4, 5, 2, 1, 10, 11, 14, 17, 21, 20, 19, 18, 6, 7, 8, 9, 12, 13, 15, 16, 3]
 
     def test_heap_parent(self):
         self.assertEqual(heap_parent(1), 0)
@@ -78,7 +79,7 @@ class TestMinMaxHeap(unittest.TestCase):
             else:
                 assert_ = self.assertLessEqual
             for c in heap._descendants(i):
-                assert_(v.value, heap._values[c].value)
+                assert_(v.priority, heap._values[c].priority)
 
     def assertLookupIsConsistent(self, heap):
         for k, i in heap._lookup.items():
@@ -161,14 +162,47 @@ class TestMinMaxHeap(unittest.TestCase):
         self.assertIsMinMaxHeap(heap)
         self.assertLookupIsConsistent(heap)
         self.assertEqual(heap._length, len(self.example_data) - 2)
+        heap = MinMaxHeap(self.data2)
+        del heap[14]
+        self.assertIsMinMaxHeap(heap)
+
 
     def test_decrease_priority(self):
+        # Min level.
         heap = MinMaxHeap(self.example_data)
+        self.assertEqual(heap_level(heap._lookup[3])%2, 0)
         heap[3] = -0.5
         self.assertTrue(3 in heap._lookup)
-        self.assertTrue(3 in heap._lookup)
+        self.assertTrue(3 in heap._priorities)
         self.assertIsMinMaxHeap(heap)
         self.assertLookupIsConsistent(heap)
         self.assertEqual(heap.pop_min().value, -1)
         self.assertEqual(heap.pop_min().value, 3)
         self.assertEqual(heap.pop_min().value, 0)
+        # Max level.
+        heap = MinMaxHeap(self.example_data)
+        self.assertEqual(heap_level(heap._lookup[55])%2, 1)
+        heap[55] = 0.5
+        self.assertTrue(3 in heap._lookup)
+        self.assertTrue(3 in heap._priorities)
+        self.assertIsMinMaxHeap(heap)
+        self.assertLookupIsConsistent(heap)
+        self.assertEqual(heap.pop_min().value, -1)
+        self.assertEqual(heap.pop_min().value, 0)
+        self.assertEqual(heap.pop_min().value, 55)
+
+    # def test_increase_priority(self):
+    #     # Min level.
+    #     heap = MinMaxHeap(self.example_data)
+    #     self.assertEqual(heap_level(heap._lookup[3])%2, 0)
+    #     heap[3] = 80
+    #     self.assertTrue(3 in heap._lookup)
+    #     self.assertTrue(3 in heap._priorities)
+    #     self.assertIsMinMaxHeap(heap)
+    #     self.assertLookupIsConsistent(heap)
+    #     from IPython import embed
+    #     embed()
+    #     self.assertEqual(heap.pop_max_value(), 91)
+    #     self.assertEqual(heap.pop_max_value(), 3)
+
+    
