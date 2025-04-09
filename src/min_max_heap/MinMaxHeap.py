@@ -24,11 +24,11 @@ def heap_level(i: int) -> int:
     """Return the level of the index in a binary heap."""
     return len("{:b}".format(i+1)) - 1
 
-order = namedtuple("orders", ["lt", "gt", "ext"])
+order = namedtuple("orders", ["lt", "gt", "ext", "inf"])
 
 orders = [
-    order(operator.lt, operator.gt, min),
-    order(operator.gt, operator.lt, max)
+    order(operator.lt, operator.gt, min, math.inf),
+    order(operator.gt, operator.lt, max, -math.inf)
 ]
 
 @dataclass(order=True)
@@ -164,6 +164,7 @@ class MinMaxHeap(MutableMapping):
         if i > 0 and heap_parent(i) > 0:
             grandparent = heap_parent(heap_parent(i))
             if o.lt(self._values[i], self._values[grandparent]):
+                self._swap_indices(i, grandparent)
                 self._push_up_ext(grandparent, o)
 
     @property
@@ -235,6 +236,7 @@ class MinMaxHeap(MutableMapping):
         return self._delete_at(self._lookup[value])
     
     def _push_for_changed_priority(self, i, old_priority, priority):
+        # print("Push for ", i)
         o = orders[heap_level(i)%2]
         if o.lt(priority, old_priority):
             self._push_up(i)
@@ -248,6 +250,7 @@ class MinMaxHeap(MutableMapping):
             self._push_down(i)
     
     def _update_priority_at(self, i, priority):
+        # print("Update priority at", i)
         old_priority = self._values[i].priority
         self._values[i]._priority = priority
         self._priorities[self._values[i].value] = priority
@@ -256,17 +259,18 @@ class MinMaxHeap(MutableMapping):
     def add(self, value, priority=None):
         if value in self._lookup:
             raise ValueError("heap must not contain value")
-        new_element = HeapNode(math.inf, value)
+        if priority is None:
+            priority = self._key(value)
+        # o = orders[heap_level(self._length)%2]
+        new_element = HeapNode(priority, value)
         if (len(self._values) == self._length):
             self._values.append(new_element)
         else:
             self._values[self._length] = new_element
         self._lookup[value] = self._length
         self._length += 1
-        if priority is None:
-            priority = self._key(value)
-        # self._decrease_priority_at(self._length - 1, priority)
-        self._update_priority_at(self._length - 1, priority)
+        self._priorities[value] = priority
+        self._push_up(self._length - 1)
 
     # def put(self, value, priority=None):
     #     return self.add(value, priority=priority)

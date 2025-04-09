@@ -147,6 +147,10 @@ class TestMinMaxHeap(unittest.TestCase):
         self.assertIsMinMaxHeap(heap)
         self.assertLookupIsConsistent(heap)
         self.assertEqual(heap._length, len(self.example_data) + 1)
+        # print("b")
+        h2 = MinMaxHeap([1, 5, 3, 4])
+        h2.add(0)
+        self.assertIsMinMaxHeap(h2)
 
     def test_delete_value(self):
         heap = MinMaxHeap(self.example_data)
@@ -191,18 +195,18 @@ class TestMinMaxHeap(unittest.TestCase):
         self.assertEqual(heap.pop_min().value, 0)
         self.assertEqual(heap.pop_min().value, 55)
 
-    # def test_increase_priority(self):
-    #     # Min level.
-    #     heap = MinMaxHeap(self.example_data)
-    #     self.assertEqual(heap_level(heap._lookup[3])%2, 0)
-    #     heap[3] = 80
-    #     self.assertTrue(3 in heap._lookup)
-    #     self.assertTrue(3 in heap._priorities)
-    #     self.assertIsMinMaxHeap(heap)
-    #     self.assertLookupIsConsistent(heap)
-    #     from IPython import embed
-    #     embed()
-    #     self.assertEqual(heap.pop_max_value(), 91)
-    #     self.assertEqual(heap.pop_max_value(), 3)
+    def test_increase_priority(self):
+        # Min level.
+        heap = MinMaxHeap(self.example_data)
+        self.assertEqual(heap_level(heap._lookup[3])%2, 0)
+        heap[3] = 80
+        self.assertTrue(3 in heap._lookup)
+        self.assertTrue(3 in heap._priorities)
+        self.assertIsMinMaxHeap(heap)
+        self.assertLookupIsConsistent(heap)
+        # from IPython import embed
+        # embed()
+        self.assertEqual(heap.pop_max_value(), 91)
+        self.assertEqual(heap.pop_max_value(), 3)
 
     
