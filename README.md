@@ -1,10 +1,10 @@
 # heap-mapping
 
 This is a library containing an implementation of the min-max heap data
-structure, which allows for $O(log(n))$ retrieval or removal of both the
-minimum and maximum elements of the heap, as well as insertion and keys and
-changes to their priorities. Heap creation can be additionally performed in
-$O(n)$ time.
+structure, which allows for $O(1)$ retrieval and $O(log(n))$ removal of both the
+minimum and maximum elements of the heap, as well as $O(log(n))$ insertion of 
+keys and changes to their priorities. Heap creation can be additionally
+performed in $O(n)$ time.
 
 The data structure can be accessed as `MutableMapping`; keys are the
 "values" stored in the data structure, and values are their priorities.
