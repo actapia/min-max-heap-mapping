@@ -59,6 +59,35 @@ class HeapNode:
         yield self.priority
         yield self.value
 
+class IdentityHeapNode(HeapNode):
+    """A HeapNode in which the _value elements are compared by id.
+    
+    This class is useful for heaps that must store elements that are not
+    comparable.
+    """
+    def _id_comp(self, comp, other):
+        if self._priority == other._priority:
+            return comp(id(self._value), id(other._value))
+        return comp(self._priority, other._priority)
+
+    def __lt__(self, other):
+        return self._id_comp(operator.lt, other)
+    
+    def __gt__(self, other):
+        return self._id_comp(operator.gt, other)
+    
+    def __eq__(self, other):
+        return self._id_comp(operator.eq, other)
+    
+    def __le__(self, other):
+        return self._id_comp(operator.le, other)
+    
+    def __ge__(self, other):
+        return self._id_comp(operator.ge, other)
+    
+    def __ne__(self, other):
+        return self._id_comp(operator.ne, other)
+
 class MinMaxHeap(MutableMapping):
     """A min-max heap supporting priority updates via a mapping-like interface.
     
@@ -87,10 +116,17 @@ class MinMaxHeap(MutableMapping):
     method---e.g., heap[x] = p. If x is not already in the heap, it will be
     added.
     """
-    def __init__(self, data=None, key=lambda x: x, maxsize=0):
+    def __init__(
+            self,
+            data=None,
+            key=lambda x: x,
+            maxsize=0,
+            node_class=HeapNode
+        ):
         if data is None:
             data = []
-        self._values = [HeapNode(key(i), i) for i in data]
+        self._node_class = node_class
+        self._values = [self._node_class(key(i), i) for i in data]
         self._length = len(data)
         self._lookup = dict(map(reversed, enumerate(data)))
         self._max_size = maxsize
@@ -262,7 +298,7 @@ class MinMaxHeap(MutableMapping):
         if priority is None:
             priority = self._key(value)
         # o = orders[heap_level(self._length)%2]
-        new_element = HeapNode(priority, value)
+        new_element = self._node_class(priority, value)
         if (len(self._values) == self._length):
             self._values.append(new_element)
         else:
